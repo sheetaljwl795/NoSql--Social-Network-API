@@ -31,7 +31,7 @@ const thoughtController = {
     .catch((err) => res.status(500).json(err));
   },
 
-  // Create a thought
+  // Create a new thought
   createThought(req, res) {
     Thought.create(req.body)
       .then( ({ _id }) => {
@@ -41,21 +41,33 @@ const thoughtController = {
           { new: true }
         )
       })
-      .then((dbUserData) => res.json(dbUserData))
-      .catch((err) => res.status(500).json(err));
+      .then((user) =>
+       !user
+        ? res.status(404).json({ message: 'Thought created, but no user with this Id' })
+        : res.json({ message: 'Thought successfully created' })
+      )
+     .catch((err) => res.status(500).json(err));
   },
 
-// Delete a user
-deleteUser(req, res) {
-    User.findOneAndDelete({ _id: req.params.id })
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: 'No user with that ID' })
-          : Thought.deleteMany({ _id: { $in: user.thoughts } })
+  // Delete a thought and remove them from the user
+  deleteThought(req, res) {
+    Thought.findOneAndDelete({ _id: req.params.id })
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with this Id' })
+          : User.findOneAndUpdate(
+                { thoughts: req.params.id },
+                { $pull: {thoughts: req.params.id }},
+                { new: true }
+            )
       )
-      .then(() => res.json({ message: 'User along with associated thoughts deleted!' }))
+      .then((user) =>
+       !user
+        ? res.status(404).json({ message: 'Thought deleted, but no user with this Id' })
+        : res.json({ message: 'Thought successfully deleted' })
+      )
       .catch((err) => res.status(500).json(err));
-},
+  },
 
 // Update a user
 updateUser(req, res) {
