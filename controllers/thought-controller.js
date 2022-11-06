@@ -69,50 +69,50 @@ const thoughtController = {
       .catch((err) => res.status(500).json(err));
   },
 
-// Update a user
-updateUser(req, res) {
-    User.findOneAndUpdate(
-      { _id: req.params.id },
+  // Update a thought
+  updateThought(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
       { $set: req.body },
       { runValidators: true, new: true }
     )
-    .then((user) =>
-        !user
-          ? res.status(404).json({ message: 'No user with this id!' })
-          : res.json(user)
+    .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought found with this id' })
+          : res.json({ message: 'Thought successfully updated' })
       )
     .catch((err) => res.status(500).json(err));
-},
+  },
 
-// Add a friend
-addFriend(req, res){
-    User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $addToSet: { friends: req.params.friendId} },
+  // Create a reaction
+  addReaction(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true }
     )
-    .then((user) =>
-    !user
-      ? res.status(404).json({ message: 'No user with this id!' })
-      : res.json(user)
+    .then((thought) =>
+    !thought
+      ? res.status(404).json({ message: 'No thought found with this id' })
+      : res.json(thought)
     )
     .catch((err) => res.status(500).json(err));
-},
+  },
 
-// Delete a friend
-deleteFriend(req, res){
-    User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $pull: { friends: req.params.friendId} },
+  // Delete a reaction
+  deleteReaction(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.param.thoughtId },
+        { $pull: { reactions: req.params.reactionId} },
         { new: true }
     )
-    .then((user) =>
-    !user
-      ? res.status(404).json({ message: 'No user with this id!' })
-      : res.json(user)
+    .then((thought) =>
+    !thought
+      ? res.status(404).json({ message: 'No reaction found with this id' })
+      : res.json(thought)
     )
     .catch((err) => res.status(500).json(err));
-},
+  },
 };
 
-module.exports = userController;
+module.exports = thoughtController;
