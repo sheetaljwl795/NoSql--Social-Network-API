@@ -18,7 +18,7 @@ const userController = {
             .catch((err) => res.status(500).json(err));
     },
     
-    // Get a user by ID
+    // Get a user by Id
     getSingleUser(req, res) {
         User.findOne({ _id: req.params.id })
         .populate({
@@ -32,7 +32,7 @@ const userController = {
           .select('-__v')
           .then((user) =>
             !user
-              ? res.status(404).json({ message: 'No user with that ID' })
+              ? res.status(404).json({ message: 'No user with that Id' })
               : res.json(user)
           )
           .catch((err) => res.status(500).json(err));
@@ -41,7 +41,7 @@ const userController = {
     // Create a user
     createUser(req, res) {
         User.create(req.body)
-          .then((dbUserData) => res.json(dbUserData))
+          .then((user) => res.json(user))
           .catch((err) => res.status(500).json(err));
     },
 
