@@ -5,14 +5,14 @@ const thoughtController = {
   // Get all thoughts
   getAllThoughts(req, res) {
     Thought.find({})
-        .populate({
-            path: 'reactions',
-            select: ('-__v')
-        })
-        .select('-__v')
-        .sort({ _id: -1 })
-        .then((thoughts) => res.json(thoughts))
-        .catch((err) => res.status(500).json(err));
+      .populate({
+        path: 'reactions',
+        select: ('-__v')
+      })
+      .select('-__v') 
+      .sort({ _id: -1 })          
+      .then((thoughts) => res.json(thoughts))
+      .catch((err) => { console.error(err); res.status(500).json(err) });
   },
 
   // Get one thought by Id
