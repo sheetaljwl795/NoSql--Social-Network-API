@@ -9,7 +9,7 @@ To build an API for a social network web application where users can share their
 4)MongoDB
 5)Mongoose
 
-### Walkthrough Vedio
+### Walkthrough Video
 
 https://drive.google.com/file/d/1LrPcwIRsmAaW-N9qg1qQeDkCskjHA9g2/view
 
